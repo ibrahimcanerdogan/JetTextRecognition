@@ -2,6 +2,10 @@
 
 A modern Android application that leverages Google's ML Kit Text Recognition v2 to perform real-time text recognition from images. Built with Jetpack Compose, this application demonstrates the power of machine learning in mobile applications.
 
+<p align="center">
+  <img src="https://developers.google.com/static/ml-kit/vision/text-recognition/images/text_recognition2x.png" alt="Text Recognition" />
+</p>
+
 ## Features
 
 - **Real-time Text Recognition**: Recognize text in real-time from images using ML Kit's Text Recognition v2
