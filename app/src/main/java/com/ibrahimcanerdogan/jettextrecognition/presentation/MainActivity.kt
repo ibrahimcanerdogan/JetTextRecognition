@@ -14,6 +14,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -28,6 +29,7 @@ import com.ibrahimcanerdogan.jettextrecognition.presentation.text.TextRecognitio
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 import android.os.Build
+import androidx.compose.foundation.background
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -90,7 +92,7 @@ fun MainScreen() {
         if (isGranted) {
             galleryLauncher.launch("image/*")
         } else {
-            snackbarMessage = "Gallery permission is required to select images"
+            snackbarMessage = "Galeri izni gerekli. Ayarlardan izin verebilirsiniz"
             showSnackbar = true
         }
     }
@@ -143,10 +145,22 @@ fun MainScreen() {
             Snackbar(
                 modifier = Modifier.padding(16.dp),
                 action = {
-                    TextButton(onClick = { showSnackbar = false }) {
-                        Text("Dismiss")
+                    TextButton(
+                        onClick = {
+                            showSnackbar = false
+                            // Open app settings
+                            val intent = android.content.Intent(
+                                android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                                android.net.Uri.fromParts("package", context.packageName, null)
+                            )
+                            context.startActivity(intent)
+                        }
+                    ) {
+                        Text("Ayarlara Git")
                     }
-                }
+                },
+                containerColor = MaterialTheme.colorScheme.errorContainer,
+                contentColor = MaterialTheme.colorScheme.onErrorContainer
             ) {
                 Text(snackbarMessage)
             }
@@ -159,37 +173,110 @@ fun HomeScreen(
     onCameraClick: () -> Unit,
     onGalleryClick: () -> Unit
 ) {
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
+            .background(MaterialTheme.colorScheme.background)
     ) {
-        Button(
-            onClick = onCameraClick,
-            modifier = Modifier.fillMaxWidth()
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp)
+                .align(Alignment.Center),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(32.dp)
         ) {
-            Icon(
-                imageVector = Icons.Default.Camera,
-                contentDescription = "Camera"
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Text("Take Photo")
-        }
+            // Logo ve Başlık
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.TextFields,
+                    contentDescription = "App Logo",
+                    modifier = Modifier.size(64.dp),
+                    tint = MaterialTheme.colorScheme.primary
+                )
+                Text(
+                    text = "Metin Tanıma",
+                    style = MaterialTheme.typography.headlineMedium,
+                    color = MaterialTheme.colorScheme.primary
+                )
+                Text(
+                    text = "Fotoğraf çekin veya galeriden seçin",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
 
-        Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
-        Button(
-            onClick = onGalleryClick,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Icon(
-                imageVector = Icons.Default.Image,
-                contentDescription = "Gallery"
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Text("Select from Gallery")
+            // Butonlar
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant
+                )
+            ) {
+                Column(
+                    modifier = Modifier.padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    ElevatedButton(
+                        onClick = onCameraClick,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(56.dp),
+                        colors = ButtonDefaults.elevatedButtonColors(
+                            containerColor = MaterialTheme.colorScheme.primaryContainer,
+                            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                        ),
+                        elevation = ButtonDefaults.elevatedButtonElevation(
+                            defaultElevation = 6.dp,
+                            pressedElevation = 8.dp,
+                            hoveredElevation = 8.dp
+                        )
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Camera,
+                            contentDescription = "Kamera",
+                            modifier = Modifier.size(24.dp)
+                        )
+                        Spacer(modifier = Modifier.width(12.dp))
+                        Text(
+                            text = "Fotoğraf Çek",
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                    }
+
+                    ElevatedButton(
+                        onClick = onGalleryClick,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(56.dp),
+                        colors = ButtonDefaults.elevatedButtonColors(
+                            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                            contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+                        ),
+                        elevation = ButtonDefaults.elevatedButtonElevation(
+                            defaultElevation = 6.dp,
+                            pressedElevation = 8.dp,
+                            hoveredElevation = 8.dp
+                        )
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Image,
+                            contentDescription = "Galeri",
+                            modifier = Modifier.size(24.dp)
+                        )
+                        Spacer(modifier = Modifier.width(12.dp))
+                        Text(
+                            text = "Galeriden Seç",
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                    }
+                }
+            }
         }
     }
 } 
