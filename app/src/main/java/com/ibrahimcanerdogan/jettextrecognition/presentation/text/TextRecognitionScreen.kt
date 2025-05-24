@@ -111,6 +111,53 @@ fun TextRecognitionScreen(
                             .padding(16.dp)
                             .verticalScroll(rememberScrollState())
                     ) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            ElevatedButton(
+                                onClick = {
+                                    copyToClipboard(context, result.text)
+                                    snackbarMessage = "Metin panoya kopyalandı"
+                                    showSnackbar = true
+                                },
+                                modifier = Modifier.weight(1f),
+                                colors = ButtonDefaults.elevatedButtonColors(
+                                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                                )
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.ContentCopy,
+                                    contentDescription = "Kopyala",
+                                    modifier = Modifier.size(20.dp)
+                                )
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Text("Kopyala")
+                            }
+
+                            ElevatedButton(
+                                onClick = {
+                                    shareText(context, result.text)
+                                },
+                                modifier = Modifier.weight(1f),
+                                colors = ButtonDefaults.elevatedButtonColors(
+                                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                                    contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+                                )
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Share,
+                                    contentDescription = "Paylaş",
+                                    modifier = Modifier.size(20.dp)
+                                )
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Text("Paylaş")
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
                         Card(
                             modifier = Modifier.fillMaxWidth(),
                             colors = CardDefaults.cardColors(
@@ -140,53 +187,7 @@ fun TextRecognitionScreen(
                                 )
                             }
                         }
-                        
-                        Spacer(modifier = Modifier.height(16.dp))
-                        
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            ElevatedButton(
-                                onClick = {
-                                    copyToClipboard(context, result.text)
-                                    snackbarMessage = "Metin panoya kopyalandı"
-                                    showSnackbar = true
-                                },
-                                modifier = Modifier.weight(1f),
-                                colors = ButtonDefaults.elevatedButtonColors(
-                                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer
-                                )
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.ContentCopy,
-                                    contentDescription = "Kopyala",
-                                    modifier = Modifier.size(20.dp)
-                                )
-                                Spacer(modifier = Modifier.width(8.dp))
-                                Text("Kopyala")
-                            }
-                            
-                            ElevatedButton(
-                                onClick = {
-                                    shareText(context, result.text)
-                                },
-                                modifier = Modifier.weight(1f),
-                                colors = ButtonDefaults.elevatedButtonColors(
-                                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                                    contentColor = MaterialTheme.colorScheme.onSecondaryContainer
-                                )
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.Share,
-                                    contentDescription = "Paylaş",
-                                    modifier = Modifier.size(20.dp)
-                                )
-                                Spacer(modifier = Modifier.width(8.dp))
-                                Text("Paylaş")
-                            }
-                        }
+
                     }
                 }
                 is TextRecognitionUiState.Error -> {
