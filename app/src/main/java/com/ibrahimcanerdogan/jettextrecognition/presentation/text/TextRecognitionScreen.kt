@@ -40,7 +40,7 @@ fun TextRecognitionScreen(
                 title = { 
                     Text(
                         "Tanınan Metin",
-                        style = MaterialTheme.typography.headlineSmall
+                        style = MaterialTheme.typography.titleLarge
                     )
                 },
                 navigationIcon = {
